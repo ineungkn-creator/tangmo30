@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { ArrowDown, Heart, Music2, Pause, Play, Sparkles } from 'lucide-react'
+import { ArrowDown, Heart, Music2, Pause, Sparkles } from 'lucide-react'
 
 type Memory = { image: string; date: string; caption: string; note: string; rotate: string }
 
@@ -62,7 +62,7 @@ export default function App() {
   return <main className="page-shell">
     <div className="grain" aria-hidden="true" />
     <header className="topline">
-      <span className="topline-mark"><Heart size={13} fill="currentColor" /> a little something</span>
+      <span className="topline-mark"><Heart size={13} fill="currentColor" /> Tangmo <span className="name-amp">&</span> Neung</span>
       <button className="music-button" onClick={toggleMusic} aria-label={musicOn ? 'ปิดเพลง' : 'เปิดเพลง'}>
         {musicOn ? <Pause size={15} /> : <Music2 size={15} />}
         <span>{musicOn ? 'Pause song' : 'Play our song'}</span>
@@ -74,7 +74,7 @@ export default function App() {
       <div className="scene-note note-left">made with love</div>
       <div className="scene-note note-right">for you, always ♡</div>
       <div className="envelope-wrap">
-        <div className="letter-peek"><span>ถึงคนโปรดของเรา ♡</span><span className="peek-line" /></div>
+        <div className="letter-peek"><span>To my Tangmo ♡</span><span className="peek-line" /><small>from Neung</small></div>
         <div className="envelope-back" />
         <div className="envelope-letter-shadow" />
         <div className="envelope-front"><span className="front-fold left-fold" /><span className="front-fold right-fold" /><span className="front-fold bottom-fold" /></div>
@@ -82,9 +82,9 @@ export default function App() {
         <div className="envelope-stamp"><span>FOR</span><Heart size={12} fill="currentColor" /><span>YOU</span></div>
       </div>
       <div className="envelope-intro">
-        <p className="eyebrow"><Sparkles size={13} /> A SMALL BIRTHDAY SURPRISE</p>
-        <h1>Chapter 30<br /><em>จดหมายถึงคนเก่งของเรา</em></h1>
-        <p className="intro-copy">22 November 2026 · Your 30th birthday<br />ตั้งใจทำสิ่งเล็ก ๆ นี้ให้เธอ ♡</p>
+        <p className="eyebrow"><Sparkles size={13} /> A LETTER FROM NEUNG TO TANGMO</p>
+        <h1>Chapter 30<br /><em>Happy Birthday, Tangmo</em></h1>
+        <p className="intro-copy">22 November 2026 · Your 30th birthday<br />ด้วยรักจากหนึ่ง ถึงแตงโม ♡</p>
         <button className="open-button" onClick={() => setOpened(true)} disabled={opened}>
           {opened ? 'จดหมายเปิดแล้ว ♡' : 'เปิดจดหมายของเธอ'} <span aria-hidden="true">↗</span>
         </button>
@@ -96,11 +96,11 @@ export default function App() {
     <section ref={letterRef} className={`letter-content ${opened ? 'letter-visible' : ''}`}>
       <div className="paper-sheet">
         <div className="paper-holes" aria-hidden="true"><i /><i /><i /><i /><i /><i /></div>
-        <div className="letter-topline"><span>CHAPTER 30 · OUR LITTLE STORY</span><span>22.11.2026 ♡</span></div>
+        <div className="letter-topline"><span>TANGMO &amp; NEUNG · OUR LITTLE STORY</span><span>22.11.2026 ♡</span></div>
         <div className="letter-heading">
-          <p className="handwritten small-hand">Happy 30th Birthday, my love!</p>
-          <h2>สุขสันต์วันเกิดนะ<br /><span>คนเก่งของเรา</span></h2>
-          <p className="letter-date">22 พฤศจิกายน 2026 · บทใหม่ของเธอ ♡</p>
+          <p className="handwritten small-hand">Happy 30th Birthday, Tangmo!</p>
+          <h2>สุขสันต์วันเกิดนะ<br /><span>แตงโม ♡</span></h2>
+          <p className="letter-date">จากหนึ่ง · 22 พฤศจิกายน 2026 · Chapter 30</p>
         </div>
         <div className="letter-body">
           <p>ก่อนอื่นเลย อยากบอกว่า <span className="underline-wavy">เราภูมิใจในตัวเธอมากนะ</span> และดีใจมาก ๆ ที่ได้เป็นคนหนึ่งที่ได้เห็นเธอเติบโต</p>
@@ -139,11 +139,11 @@ export default function App() {
           <p>ขอให้เธอยังได้ทำงานที่ภูมิใจ ได้เติบโตในแบบที่ต้องการ และมีโอกาสได้ใช้ชีวิตในแบบที่ตัวเองชอบ ขอให้ความพยายามที่เธอทุ่มเทมาตลอดค่อย ๆ ออกดอกออกผล และอย่าลืมหันกลับมาชื่นชมตัวเองบ้างนะ เพราะเธอทำได้ดีมากแล้ว</p>
           <p>และในวันที่เหนื่อยหรือไม่เป็นอย่างใจ ขอให้เธอรู้ว่าไม่ต้องรับมือทุกอย่างคนเดียวก็ได้ เธอมีสิทธิ์อ่อนแอ มีสิทธิ์พัก และมีสิทธิ์ต้องการความรักกับความเข้าใจเหมือนกัน เราอาจแก้ทุกปัญหาแทนเธอไม่ได้ แต่เราพร้อมฟัง พร้อมกอด และพร้อมอยู่ข้าง ๆ โดยไม่ตัดสินเสมอ</p>
           <button className="wish-reveal-button" onClick={() => setShowWish(!showWish)}>{showWish ? 'เก็บความลับไว้ก่อน ♡' : 'มีอีกอย่างอยากบอกเธอ…'} <span>{showWish ? '−' : '+'}</span></button>
-          {showWish && <div className="secret-message"><span className="handwritten">one last thing...</span><p>เราไม่ได้อยากให้เธอต้องเป็นคนเก่งสำหรับทุกคนตลอดเวลา แค่อยากให้เวลาที่อยู่กับเรา เธอวางทุกอย่างลงได้บ้าง เป็นตัวเองได้เต็มที่ และมั่นใจว่าเธอจะได้รับความรักโดยไม่ต้องพยายามพิสูจน์อะไรเลย</p><p>ขอบคุณที่เลือกเริ่มต้นเรื่องราวนี้ด้วยกันตั้งแต่วันที่ 9 สิงหาคมที่ผ่านมา เราดีใจที่ได้เป็นส่วนหนึ่งของชีวิตเธอ และหวังว่าจะได้อยู่ในวันธรรมดา ๆ รวมถึงวันสำคัญของเธอไปอีกหลายปี</p><p className="handwritten secret-end">รักและอยู่ข้างเธอเสมอนะ ♡</p></div>}
+          {showWish && <div className="secret-message"><span className="handwritten">one last thing...</span><p>เราไม่ได้อยากให้เธอต้องเป็นคนเก่งสำหรับทุกคนตลอดเวลา แค่อยากให้เวลาที่อยู่กับเรา เธอวางทุกอย่างลงได้บ้าง เป็นตัวเองได้เต็มที่ และมั่นใจว่าเธอจะได้รับความรักโดยไม่ต้องพยายามพิสูจน์อะไรเลย</p><p>ขอบคุณที่เลือกเริ่มต้นเรื่องราวนี้กับหนึ่ง ตั้งแต่วันที่ 9 สิงหาคม 2026 เราดีใจที่ได้เป็นส่วนหนึ่งของชีวิตแตงโม และหวังว่าจะได้อยู่ในวันธรรมดา ๆ รวมถึงวันสำคัญของเธอไปอีกหลายปี</p><p>ไม่ว่าโลกข้างนอกจะต้องการให้แตงโมเก่งแค่ไหน สำหรับหนึ่ง แตงโมไม่จำเป็นต้องเก่งตลอดเวลาก็ได้นะ</p><p className="handwritten secret-end">รักแตงโมเสมอ — หนึ่ง ♡</p></div>}
         </div>
         <div className="signature-block">
-          <p>ขอบคุณที่เกิดมา และขอบคุณที่ให้เราได้เป็นส่วนหนึ่งในชีวิตเธอนะ</p>
-          <p className="handwritten signature">ด้วยรักและความเข้าใจ, คนข้าง ๆ เธอ ♡</p>
+          <p>ขอบคุณที่เกิดมา และขอบคุณที่ให้หนึ่งได้เป็นส่วนหนึ่งในชีวิตแตงโมนะ</p>
+          <p className="handwritten signature">With all my love, Neung ♡</p>
           <div className="signature-stamp"><Heart size={21} fill="currentColor" /><span>SEALED<br />WITH LOVE</span></div>
         </div>
         <footer className="paper-footer"><span>made slowly, with love</span><span>หน้าโปรดของเรา ♡</span></footer>
@@ -151,6 +151,6 @@ export default function App() {
       <div className="end-note"><Heart size={14} fill="currentColor" /> that's all, my favorite person <Heart size={14} fill="currentColor" /></div>
       <button className="back-to-top" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}><ArrowDown size={14} className="up-arrow" /> กลับไปดูซองจดหมายอีกครั้ง</button>
     </section>
-    <footer className="site-footer">a little page, made only for you <span>✳</span></footer>
+    <footer className="site-footer">made with love by Neung, for Tangmo <span>✳</span></footer>
   </main>
 }

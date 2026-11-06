@@ -6,6 +6,7 @@ A mobile-first birthday letter built with React, Vite, TypeScript and Tailwind C
 - Birthday: 22 November 2026 — Chapter 30
 - Relationship anniversary: 9 August 2026
 - Shared detail: both were born on Friday
+- Names: Tangmo (แตงโม) and Neung (หนึ่ง) appear throughout the envelope, letter, and sign-off
 - Tone: warm, sincere and understanding
 
 ## Run locally
@@ -40,4 +41,3 @@ Vite outputs the static site to `dist/`.
 5. Open the deployed URL on a phone using mobile data before creating and printing the QR code.
 
 No backend or database is required. Anyone with the public URL can view the page, so only include photos and personal details that you are comfortable sharing through a public link.
-# neung-tangmo

@@ -5,3 +5,68 @@
 @media(max-width:420px){.topline{height:58px;padding:0 15px}.topline-mark{font-size:9px}.music-button{padding:7px 10px;font-size:10px}.envelope-scene{min-height:calc(100svh - 58px);padding-top:15px}.envelope-wrap{width:min(82vw,330px);height:204px}.letter-peek{height:187px}.envelope-intro{margin-top:43px}.scene-note{font-size:10px;top:18%}.note-left{left:7%}.note-right{right:7%}.flower-one{left:7%;top:14%}.flower-two{right:8%;bottom:13%}.paper-sheet{padding-left:22px;padding-right:22px}.paper-sheet:before{width:8px}.paper-holes{left:14px}.letter-body{font-size:12px}.margin-doodle{right:20px;top:355px}.memory-grid{column-gap:12px;row-gap:22px}.polaroid{padding:7px 7px 11px}.photo-date{font-size:10px}.photo-caption{font-size:9px}.memory-note{font-size:10px;line-height:1.8}.tape{width:43px;height:14px;top:-6px}.tiny-note-card{margin-bottom:35px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 .chapter-card{max-width:490px;margin:8px auto 42px;padding:23px 20px 19px;background:#f8f0e4;border:1px solid #eee1cf;box-shadow:0 3px 10px #75583b0a;transform:rotate(-.35deg)}.chapter-card>.section-number{display:block;text-align:center;margin-bottom:18px}.chapter-date-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 0;border-top:1px dashed #dfcfbc}.chapter-date-row>div{display:flex;flex-direction:column;gap:4px}.chapter-date{font-family:'Kalam',cursive;color:#b16f68;font-size:14px;letter-spacing:.06em}.chapter-date-row strong{font-size:13px;font-weight:500;color:#59483c}.chapter-date-row p,.friday-note p{font-size:11px;line-height:1.9;color:#897565;margin:0}.chapter-heart{color:#c18b7c;font-size:22px;padding:0 5px}.friday-note{text-align:center;padding:16px 5px 0;border-top:1px dashed #dfcfbc}.friday-note .handwritten{font-size:20px;color:#ae7069}.friday-note p{margin-top:4px}
+
+/* Mobile readability pass: larger type, calmer line lengths, and more breathing room. */
+@media (max-width: 600px) {
+  .topline-mark { font-size: 11px; }
+  .music-button { font-size: 12px; padding: 9px 12px; }
+  .eyebrow { font-size: 11px; line-height: 1.6; letter-spacing: .13em; }
+  .envelope-intro h1 { font-size: clamp(30px, 8vw, 38px); line-height: 1.4; }
+  .intro-copy { font-size: 15px; line-height: 1.9; }
+  .open-button { font-size: 14px; padding: 14px 24px; }
+  .tiny-hint { font-size: 11px; }
+  .scene-note { font-size: 12px; }
+
+  .paper-sheet { padding-top: 30px; padding-bottom: 28px; }
+  .letter-topline { font-size: 10px; line-height: 1.6; }
+  .small-hand { font-size: 23px; }
+  .letter-heading h2 { font-size: clamp(27px, 7vw, 34px); line-height: 1.45; }
+  .letter-date { font-size: 12px; line-height: 1.7; }
+  .letter-body { font-size: 16px; line-height: 2.05; }
+  .letter-body p { margin-bottom: 19px; }
+  .inline-hand { font-size: 19px; }
+  .section-number { font-size: 11px; letter-spacing: .14em; }
+  .memory-intro h3, .wish-section h3 { font-size: clamp(25px, 6.8vw, 31px); line-height: 1.5; }
+  .memory-intro > p { font-size: 14px; line-height: 1.8; }
+
+  .photo-date { font-size: 13px; }
+  .photo-caption { font-size: 12px; line-height: 1.55; }
+  .placeholder-label { font-size: 12px; }
+  .memory-note { font-size: 14px; line-height: 1.85; padding: 0 2px; }
+  .tiny-note-card .handwritten { font-size: 22px; line-height: 1.6; }
+
+  .chapter-card { padding: 22px 16px 18px; }
+  .chapter-date { font-size: 16px; }
+  .chapter-date-row strong { font-size: 15px; line-height: 1.55; }
+  .chapter-date-row p, .friday-note p { font-size: 14px; line-height: 1.9; }
+  .friday-note .handwritten { font-size: 22px; }
+  .wish-section > p { font-size: 16px; line-height: 2.05; color: #6d5c4e; }
+  .wish-reveal-button { font-size: 15px; line-height: 1.6; padding: 13px 15px; }
+  .secret-message { font-size: 16px; line-height: 2.05; }
+  .secret-message p { font-size: 16px; line-height: 2.05; }
+  .secret-end { font-size: 21px; }
+  .signature-block > p { font-size: 15px; line-height: 1.95; }
+  .signature-block .signature { font-size: 21px; line-height: 1.7; }
+  .paper-footer { font-size: 10px; line-height: 1.6; }
+  .end-note { font-size: 17px; }
+  .back-to-top { font-size: 13px; padding: 10px; }
+  .site-footer { font-size: 11px; line-height: 1.7; }
+}
+
+@media (max-width: 360px) {
+  .paper-sheet { padding-left: 19px; padding-right: 17px; }
+  .letter-body, .wish-section > p, .secret-message, .secret-message p { font-size: 15px; }
+  .chapter-date-row { gap: 7px; }
+  .chapter-date-row strong { font-size: 14px; }
+  .memory-grid { column-gap: 10px; }
+}
+
+
+/* Names are part of the keepsake, not decorative copy. Keep them legible on phones. */
+.name-amp { color: #bd8177; font-family: 'Itim', cursive; font-size: 1.25em; }
+.letter-peek small { font-family: 'Kalam', cursive; font-size: 14px; color: #b17b6d; }
+@media (max-width: 600px) {
+  .topline-mark { font-size: 12px; letter-spacing: .04em; }
+  .letter-peek { font-size: 19px; }
+  .letter-peek small { font-size: 16px; }
+}
