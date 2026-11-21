@@ -3,20 +3,21 @@ import { ArrowDown, Heart, Music2, Pause, Sparkles } from 'lucide-react'
 
 type Memory = { image: string; date: string; caption: string; note: string; rotate: string }
 
+// เวลาเริ่มเล่นเพลง หน่วยเป็นวินาที เช่น 90 = 1:30, 125 = 2:05
+const MUSIC_START_SECONDS = 171
+
 // เปลี่ยนข้อความและรูปภาพในส่วนนี้ให้เป็นเรื่องราวของคุณสองคน
 const memories: Memory[] = [
-  { image: '/images/photo-01.jpg', date: 'วันที่เราเริ่มต้น', caption: 'one of my favorite days', note: 'ยังจำความรู้สึกวันนั้นได้อยู่เลย :)', rotate: '-2deg' },
-  { image: '/images/photo-02.jpg', date: 'วันธรรมดาที่พิเศษ', caption: 'just us being us', note: 'แค่ได้อยู่ด้วยกัน วันธรรมดาก็ดีขึ้นเยอะเลย', rotate: '2.4deg' },
-  { image: '/images/photo-03.jpg', date: 'รอยยิ้มที่ชอบ', caption: 'your smile, always', note: 'ชอบเวลาที่เธอยิ้มแบบนี้ที่สุด', rotate: '-1.2deg' },
-  { image: '/images/photo-04.jpg', date: 'ทริปเล็ก ๆ ของเรา', caption: 'somewhere with you', note: 'อยากมีรูปแบบนี้ด้วยกันอีกเยอะ ๆ', rotate: '2deg' },
-  { image: '/images/photo-05.jpg', date: 'ความทรงจำอีกหน้า', caption: 'a tiny happy moment', note: 'เก็บเรื่องเล็ก ๆ พวกนี้ไว้ในใจเสมอ', rotate: '-2.5deg' },
-  { image: '/images/photo-06.jpg', date: 'ที่ที่มีเธอ', caption: 'my kind of place', note: 'สถานที่ไม่สำคัญเท่าคนที่ไปด้วยกัน', rotate: '1.5deg' },
-  { image: '/images/photo-07.jpg', date: 'อีกวันที่อยากจำ', caption: 'wish we could pause time', note: 'บางทีก็อยากหยุดเวลาไว้ตรงนี้นาน ๆ', rotate: '-1.8deg' },
-  { image: '/images/photo-08.jpg', date: 'รูปโปรดอีกรูป', caption: 'to more little adventures', note: 'ขอให้เรายังมีเรื่องให้หัวเราะด้วยกันอีกเยอะเลย', rotate: '2.2deg' },
+  { image: '/images/photo-01.png', date: 'วันแรก ๆ ของเรา', caption: 'one of our first memories', note: 'ยังเป็นช่วงที่เราเพิ่งเริ่มเรียนรู้กัน แต่พอมองย้อนกลับไปก็เป็นช่วงเวลาที่น่ารักมากเลย', rotate: '-2deg' },
+  { image: '/images/photo-02.png', date: 'วันธรรมดาที่มีเธอ', caption: 'the little things with you', note: 'ไม่ต้องมีแพลนพิเศษอะไรเลย แค่ได้ใช้เวลาด้วยกันก็มีความสุขแล้ว', rotate: '2.4deg' },
+  { image: '/images/photo-03.jpg', date: 'รอยยิ้มที่ชอบ', caption: 'your smile makes my day', note: 'เป็นรอยยิ้มที่เห็นกี่ครั้งก็ยังชอบ และหวังว่าจะได้เห็นแบบนี้ไปอีกนาน ๆ', rotate: '-1.2deg' },
+  { image: '/images/photo-04.jpg', date: 'ไปด้วยกันอีกนะ', caption: "let's go somewhere together", note: 'ยังมีอีกหลายที่ที่อยากชวนหนูไป และอีกหลายเรื่องที่เราอยากลองทำด้วยกัน', rotate: '2deg' },
+  { image: '/images/photo-05.jpg', date: 'ที่ไหนก็พิเศษ', caption: 'anywhere feels like home', note: 'ไม่ได้สำคัญว่าที่ไหน แค่มีหนูอยู่ข้าง ๆ ก็รู้สึกว่าที่ตรงนั้นพิเศษขึ้นมาแล้ว', rotate: '1.5deg' },
+  { image: '/images/photo-06.jpg', date: 'ยังมีต่อจากนี้', caption: 'to all the days ahead', note: 'นี่เป็นเพียงส่วนหนึ่งของเรื่องราวเรา ยังมีวันใหม่ ๆ สถานที่ใหม่ ๆ และความทรงจำอีกมากที่รอให้เราไปเจอด้วยกัน', rotate: '2.2deg' },
 ]
 
 function PhotoPlaceholder({ index }: { index: number }) {
-  const tones = ['#d7d6c4', '#e5cfc0', '#c8d4cf', '#d9c7c6', '#e3d8b9', '#c9d0dc', '#e4cfc3', '#d0d8c6']
+  const tones = ['#d7d6c4', '#e5cfc0', '#c8d4cf', '#d9c7c6', '#e3d8b9', '#c9d0dc']
   return <div className="photo-placeholder" style={{ background: `linear-gradient(145deg, ${tones[index % tones.length]}, #f3e9db)` }}>
     <span className="placeholder-sun" />
     <span className="placeholder-hill hill-one" />
@@ -56,7 +57,14 @@ export default function App() {
     const audio = audioRef.current
     if (!audio) return
     if (musicOn) { audio.pause(); setMusicOn(false); return }
-    try { await audio.play(); setMusicOn(true) } catch { setMusicOn(false) }
+    try {
+      // กำหนดจุดเริ่มเล่นทุกครั้งที่กดเปิดเพลง
+      audio.currentTime = MUSIC_START_SECONDS
+      await audio.play()
+      setMusicOn(true)
+    } catch {
+      setMusicOn(false)
+    }
   }
 
   return <main className="page-shell">
@@ -72,9 +80,9 @@ export default function App() {
 
     <section className={`envelope-scene ${opened ? 'is-open' : ''}`} aria-label="ซองจดหมายวันเกิด">
       <div className="scene-note note-left">made with love</div>
-      <div className="scene-note note-right">for you, always ♡</div>
+      <div className="scene-note note-right">for you, always </div>
       <div className="envelope-wrap">
-        <div className="letter-peek"><span>To my Tangmo ♡</span><span className="peek-line" /><small>from Neung</small></div>
+        <div className="letter-peek"><span>To my Tangmo</span><span className="peek-line" /><small>from Neung</small></div>
         <div className="envelope-back" />
         <div className="envelope-letter-shadow" />
         <div className="envelope-front"><span className="front-fold left-fold" /><span className="front-fold right-fold" /><span className="front-fold bottom-fold" /></div>
@@ -82,11 +90,11 @@ export default function App() {
         <div className="envelope-stamp"><span>FOR</span><Heart size={12} fill="currentColor" /><span>YOU</span></div>
       </div>
       <div className="envelope-intro">
-        <p className="eyebrow"><Sparkles size={13} /> A LETTER FROM NEUNG TO TANGMO</p>
+        <p className="eyebrow"><Sparkles size={13} /> A LITTLE SOMETHING FOR YOU</p>
         <h1>Chapter 30<br /><em>Happy Birthday, Tangmo</em></h1>
-        <p className="intro-copy">22 November 2026 · Your 30th birthday<br />ด้วยรักจากหนึ่ง ถึงแตงโม ♡</p>
+        <p className="intro-copy">22 November 2026<br />With love, Neung</p>
         <button className="open-button" onClick={() => setOpened(true)} disabled={opened}>
-          {opened ? 'จดหมายเปิดแล้ว ♡' : 'เปิดจดหมายของเธอ'} <span aria-hidden="true">↗</span>
+          {opened ? 'จดหมายเปิดแล้ว' : 'เปิดจดหมายของเธอ'} <span aria-hidden="true">↗</span>
         </button>
         <span className="tiny-hint">take your time · made just for you</span>
       </div>
@@ -96,34 +104,33 @@ export default function App() {
     <section ref={letterRef} className={`letter-content ${opened ? 'letter-visible' : ''}`}>
       <div className="paper-sheet">
         <div className="paper-holes" aria-hidden="true"><i /><i /><i /><i /><i /><i /></div>
-        <div className="letter-topline"><span>TANGMO &amp; NEUNG · OUR LITTLE STORY</span><span>22.11.2026 ♡</span></div>
+        <div className="letter-topline"><span>TANGMO & NEUNG · OUR LITTLE STORY </span><span>22 NOVEMBER 2026</span></div>
         <div className="letter-heading">
           <p className="handwritten small-hand">Happy 30th Birthday, Tangmo!</p>
-          <h2>สุขสันต์วันเกิดนะ<br /><span>แตงโม ♡</span></h2>
-          <p className="letter-date">จากหนึ่ง · 22 พฤศจิกายน 2026 · Chapter 30</p>
+          <h2>สุขสันต์วันเกิดนะ<br /><span>แตงโม </span></h2>
         </div>
         <div className="letter-body">
-          <p>ก่อนอื่นเลย อยากบอกว่า <span className="underline-wavy">เราภูมิใจในตัวเธอมากนะ</span> และดีใจมาก ๆ ที่ได้เป็นคนหนึ่งที่ได้เห็นเธอเติบโต</p>
-          <p>เธอเป็นคนเก่ง ทำงานเก่ง และจัดการชีวิตของตัวเองได้ดีเสมอ เราชื่นชมความตั้งใจและความสามารถของเธอจริง ๆ แต่เราอยากให้เธอรู้ไว้อีกอย่างว่า เธอไม่จำเป็นต้องเก่งหรือเข้มแข็งตลอดเวลาก็ได้นะ</p>
-          <p>วันไหนเหนื่อย วันไหนอยากพัก หรือวันที่แค่อยากมีใครสักคนรับฟัง เธอไม่ต้องอธิบายทุกอย่างให้เก่งก็ได้ เราอยากเป็นคนที่รับฟัง เข้าใจ และอยู่ข้าง ๆ เธอในแบบที่เธอเป็น <span className="handwritten inline-hand">you can always be yourself</span> ♡</p>
+          <p>ก่อนอื่นเลย อยากบอกว่า <span className="underline-wavy">พี่ภูมิใจในตัวหนูมากเลยนะ</span> และดีใจมาก ๆ ที่ได้อยู่ข้าง ๆ ได้เห็นหนูเติบโต และได้เห็นว่าหนูพยายามกับชีวิตมากแค่ไหน</p>
+          <p>หนูเป็นคนเก่งนะ ตั้งใจทำงาน และจัดการหลาย ๆ อย่างได้ดีเสมอ พี่ชื่นชมในความสามารถและความพยายามของหนูมาก ๆ แต่พี่ก็อยากให้หนูจำไว้นะว่า ไม่จำเป็นต้องเก่งหรือเข้มแข็งตลอดเวลาก็ได้</p>
+          <p>วันไหนเหนื่อยก็พักได้ วันไหนไม่ไหวหรือแค่อยากมีใครสักคนรับฟัง ก็ไม่ต้องเก็บทุกอย่างไว้คนเดียว พี่อยากเป็นคนที่หนูคุยด้วยได้ เป็นคนที่พร้อมรับฟัง เข้าใจ และอยู่ข้าง ๆ หนูในวันที่เป็นตัวเองได้เต็มที่ <span className="handwritten inline-hand">หนูสามารถเป็นตัวของตัวเองกับพี่ได้เสมอเลย</span></p>
         </div>
         <div className="chapter-card">
-          <span className="section-number">A FEW DATES TO KEEP</span>
+          <span className="section-number">A FEW DATES THAT MEAN A LOT</span>
           <div className="chapter-date-row">
-            <div><span className="chapter-date">09.08.2026</span><strong>The day we became us.</strong><p>วันที่เราเริ่มต้นเป็นแฟนกัน และเริ่มมีคำว่าเราในทุก ๆ วัน</p></div>
-            <span className="chapter-heart">♡</span>
+            <div><span className="chapter-date">09.08.2026</span><strong>The day we became us.</strong><p>วันที่เราเริ่มต้นเป็นแฟนกัน และกลายเป็นส่วนหนึ่งในชีวิตของกันและกัน</p></div>
+            <span className="chapter-heart"></span>
           </div>
           <div className="chapter-date-row">
-            <div><span className="chapter-date">22.11.2026</span><strong>Chapter 30 begins.</strong><p>อีกหนึ่งบทของชีวิตที่เราอยากเห็นเธอมีความสุขและภูมิใจในตัวเอง</p></div>
+            <div><span className="chapter-date">22.11.2026</span><strong>Your 30th, our next chapter.</strong><p>วันเกิดปีที่ 30 ของเธอ อีกหนึ่งช่วงเวลาที่เราอยากอยู่ข้าง ๆ และร่วมยินดีไปกับเธอ</p></div>
             <span className="chapter-heart">✳</span>
           </div>
-          <div className="friday-note"><span className="handwritten">Friday soul × Friday soul</span><p>เราเกิดวันศุกร์เหมือนกันด้วยนะ เป็นความบังเอิญเล็ก ๆ ที่เราชอบ ♡</p></div>
+          <div className="friday-note"><span className="handwritten">Friday Partners in Crime </span><p>ศุกร์กับศุกร์มาเจอกัน จะนิสัยคล้ายกันหรือจะดื้อพอกันก็ไม่รู้ แต่ที่แน่ ๆ มีคนให้ป่วนด้วยกันไปอีกนานเลย</p></div>
         </div>
-        <div className="margin-doodle">♡<span>♡</span></div>
+        <div className="margin-doodle"><span></span></div>
         <div className="memory-intro">
-          <span className="section-number">01 / OUR LITTLE WORLD</span>
-          <h3>เรื่องเล็ก ๆ ที่เรา<br /><em>อยากจำไปนาน ๆ</em></h3>
-          <p>เลื่อนดูช้า ๆ ก็ได้นะ รูปพวกนี้ทำให้เรายิ้มทุกครั้งเลย</p>
+          <span className="section-number">01 / LITTLE MOMENTS, BIG MEMORIES</span>
+          <h3>เรื่องราวเล็ก ๆ ของเรา<br /><em>ที่อยากเก็บไว้ให้นานที่สุด</em></h3>
+          <p>รูปบางรูปอาจเป็นแค่วันธรรมดาวันหนึ่ง แต่พอกลับมาดูทีไร ก็ทำให้เรานึกถึงช่วงเวลาดี ๆ ได้ทุกครั้ง ลองค่อย ๆ ดูนะ ยังมีอีกหลายโมเมนต์ที่พี่อยากเก็บไว้</p>
         </div>
         <div className="memory-grid">
           {memories.map((memory, index) => <div className={`memory-item memory-${index + 1}`} key={memory.image}>
@@ -131,24 +138,27 @@ export default function App() {
             <p className="memory-note">{memory.note}</p>
           </div>)}
         </div>
-        <div className="tiny-note-card"><span className="note-star">✳</span><p className="handwritten">my favorite memories<br />are the ones with you.</p><span className="note-heart">♡</span></div>
+        <div className="tiny-note-card"><span className="note-star">✳</span><p className="handwritten">my favorite memories<br />are the ones with you.</p><span className="note-heart"></span></div>
         <div className="wish-section">
-          <span className="section-number">02 / A WISH FOR YOU</span>
+          <span className="section-number">02 / A YEAR JUST FOR YOU</span>
           <div className="wish-doodle">✿</div>
-          <h3>ยินดีต้อนรับสู่บทที่ 30<br /><em>ขอให้ปีนี้ใจดีกับเธอ</em></h3>
-          <p>ขอให้เธอยังได้ทำงานที่ภูมิใจ ได้เติบโตในแบบที่ต้องการ และมีโอกาสได้ใช้ชีวิตในแบบที่ตัวเองชอบ ขอให้ความพยายามที่เธอทุ่มเทมาตลอดค่อย ๆ ออกดอกออกผล และอย่าลืมหันกลับมาชื่นชมตัวเองบ้างนะ เพราะเธอทำได้ดีมากแล้ว</p>
-          <p>และในวันที่เหนื่อยหรือไม่เป็นอย่างใจ ขอให้เธอรู้ว่าไม่ต้องรับมือทุกอย่างคนเดียวก็ได้ เธอมีสิทธิ์อ่อนแอ มีสิทธิ์พัก และมีสิทธิ์ต้องการความรักกับความเข้าใจเหมือนกัน เราอาจแก้ทุกปัญหาแทนเธอไม่ได้ แต่เราพร้อมฟัง พร้อมกอด และพร้อมอยู่ข้าง ๆ โดยไม่ตัดสินเสมอ</p>
-          <button className="wish-reveal-button" onClick={() => setShowWish(!showWish)}>{showWish ? 'เก็บความลับไว้ก่อน ♡' : 'มีอีกอย่างอยากบอกเธอ…'} <span>{showWish ? '−' : '+'}</span></button>
-          {showWish && <div className="secret-message"><span className="handwritten">one last thing...</span><p>เราไม่ได้อยากให้เธอต้องเป็นคนเก่งสำหรับทุกคนตลอดเวลา แค่อยากให้เวลาที่อยู่กับเรา เธอวางทุกอย่างลงได้บ้าง เป็นตัวเองได้เต็มที่ และมั่นใจว่าเธอจะได้รับความรักโดยไม่ต้องพยายามพิสูจน์อะไรเลย</p><p>ขอบคุณที่เลือกเริ่มต้นเรื่องราวนี้กับหนึ่ง ตั้งแต่วันที่ 9 สิงหาคม 2026 เราดีใจที่ได้เป็นส่วนหนึ่งของชีวิตแตงโม และหวังว่าจะได้อยู่ในวันธรรมดา ๆ รวมถึงวันสำคัญของเธอไปอีกหลายปี</p><p>ไม่ว่าโลกข้างนอกจะต้องการให้แตงโมเก่งแค่ไหน สำหรับหนึ่ง แตงโมไม่จำเป็นต้องเก่งตลอดเวลาก็ได้นะ</p><p className="handwritten secret-end">รักแตงโมเสมอ — หนึ่ง ♡</p></div>}
+          <h3>Here’s to Chapter 30<br /><em>ขอให้ปีนี้มีแต่เรื่องดี ๆ และมีความสุขในแบบของหนู</em></h3>
+          <p>ขอให้ปีนี้เป็นอีกปีที่หนูได้ทำอะไรหลาย ๆ อย่างที่ตั้งใจ ได้เจอเรื่องราวดี ๆ ได้ลองสิ่งใหม่ ๆ และได้เห็นความพยายามของตัวเองค่อย ๆ กลายเป็นความสำเร็จ อยากให้หนูภูมิใจในตัวเองให้มาก ๆ เพราะที่ผ่านมาหนูทำอะไรได้ดีตั้งเยอะแล้ว</p>
+          <p>แล้วก็อย่าลืมแบ่งเวลาให้ตัวเองด้วยนะ ไม่ต้องรีบเก่งไปซะทุกเรื่อง ไม่ต้องรีบไปให้ถึงทุกเป้าหมายในทันที บางวันแค่ได้พัก ได้กินของอร่อย ได้ออกไปเที่ยว หรือได้นอนเต็มอิ่ม ก็ถือเป็นวันที่ดีแล้ว</p>
+          <p>ไม่ว่าวันไหนจะเหนื่อย จะท้อ หรือเจอเรื่องที่ไม่เป็นอย่างใจ อยากให้รู้ว่ายังมีพี่อยู่ตรงนี้นะ ไม่จำเป็นต้องเก็บทุกอย่างไว้คนเดียว จะมาบ่น มาเล่า มางอแง หรือจะเงียบ ๆ แล้วให้กอดก็ได้ทั้งนั้น พี่อาจไม่ได้มีคำตอบให้ทุกเรื่อง แต่พี่พร้อมฟังและอยู่ข้าง ๆ หนูเสมอ</p>
+          <button className="wish-reveal-button" onClick={() => setShowWish(!showWish)}>{showWish ? 'ซ่อนข้อความนี้ไว้ก่อน ' : 'ยังมีอีกเรื่องที่อยากบอก…'} <span>{showWish ? '−' : '+'}</span></button>
+          {showWish && <div className="secret-message"><span className="handwritten">one more thing...</span><p>อยากให้เวลาที่อยู่กับพี่ หนูไม่ต้องแบกอะไรไว้เยอะนะ ไม่ต้องพยายามทำทุกอย่างให้ดี ไม่ต้องเก่งไปซะทุกเรื่อง และไม่ต้องฝืนยิ้มในวันที่เหนื่อยหรือไม่ไหวเลย</p><p>ถ้าวันไหนเหนื่อยก็พัก ถ้าวันไหนอยากบ่นก็เล่าให้พี่ฟัง หรือถ้าไม่อยากพูดอะไรเลย แค่อยากนั่งอยู่ด้วยกันเงียบ ๆ ก็ได้ พี่อยากให้หนูรู้ว่าเวลาอยู่ตรงนี้ หนูเป็นตัวเองได้เต็มที่เลยนะ</p><p>ตั้งแต่วันที่ 9 สิงหาคมที่ผ่านมา เราก็มีเรื่องราวร่วมกันเพิ่มขึ้นเรื่อย ๆ มีทั้งวันที่สนุก วันที่หัวเราะ และวันธรรมดา ๆ ที่พอมีหนูอยู่ด้วยก็กลายเป็นวันที่พิเศษขึ้นมา พี่ดีใจนะที่เราได้มาเจอกัน และอยากมีโอกาสสร้างความทรงจำแบบนี้กับหนูไปอีกนาน ๆ</p><p>สุดท้าย อยากให้หนูรู้ไว้อย่างหนึ่งว่า หนูไม่ต้องพิสูจน์อะไรเพื่อให้พี่รักเลยนะ ไม่ว่าจะเป็นวันที่หนูเก่ง วันที่หนูเหนื่อย วันที่ทุกอย่างเป็นไปได้ดี หรือวันที่อะไร ๆ ไม่เป็นอย่างใจ พี่ก็ยังอยากมีหนูอยู่ตรงนี้เหมือนเดิม</p><p className="handwritten secret-end">รักหนูนะ — พี่หนึ่ง </p></div>}
         </div>
         <div className="signature-block">
-          <p>ขอบคุณที่เกิดมา และขอบคุณที่ให้หนึ่งได้เป็นส่วนหนึ่งในชีวิตแตงโมนะ</p>
-          <p className="handwritten signature">With all my love, Neung ♡</p>
+          <p>ดีใจนะที่เราได้มาเจอกัน และได้มีเธอเป็นส่วนหนึ่งในชีวิต</p>
+          <p>ขอบคุณที่ทำให้วันธรรมดาหลาย ๆ วันกลายเป็นวันที่น่าจดจำ</p>
+          <p className="handwritten signature">With all my love,<br />Neung </p>
           <div className="signature-stamp"><Heart size={21} fill="currentColor" /><span>SEALED<br />WITH LOVE</span></div>
+          <p className="handwritten closing-line">Our story goes on...</p>
         </div>
-        <footer className="paper-footer"><span>made slowly, with love</span><span>หน้าโปรดของเรา ♡</span></footer>
+        <footer className="paper-footer"><span>a little page, made with love</span><span>และยังมีอีกหลายเรื่องราวที่เราอยากสร้างไปด้วยกัน </span></footer>
       </div>
-      <div className="end-note"><Heart size={14} fill="currentColor" /> that's all, my favorite person <Heart size={14} fill="currentColor" /></div>
+      <div className="end-note"><Heart size={14} fill="currentColor" /> More memories to come, my love. <Heart size={14} fill="currentColor" /></div>
       <button className="back-to-top" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}><ArrowDown size={14} className="up-arrow" /> กลับไปดูซองจดหมายอีกครั้ง</button>
     </section>
     <footer className="site-footer">made with love by Neung, for Tangmo <span>✳</span></footer>
